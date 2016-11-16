@@ -53,18 +53,18 @@ namespace GridDomain.Node
             _routingActorTypedMessageActor.Handle(createActorRoute);
         }
 
-        public void RegisterSaga(ISagaDescriptor sagaDescriptor, string name)
+        public void RegisterSaga(ISagaDescriptor sagaDescriptor, string name, ExecutionPolicy policy = null)
         {
             var createActorRoute = CreateActorRouteMessage.ForSaga(sagaDescriptor, name);
             _routingActorTypedMessageActor.Handle(createActorRoute);
         }
 
-        public void RegisterHandler<TMessage, THandler>(string correlationPropertyName) where THandler : IHandler<TMessage>
+        public void RegisterHandler<TMessage, THandler>(string correlationPropertyName, ExecutionPolicy policy = null) where THandler : IHandler<TMessage>
         {
             Route<TMessage>().ToHandler<THandler>().WithCorrelation(correlationPropertyName).Register();
         }
 
-        public void RegisterProjectionGroup<T>(T @group) where T : IProjectionGroup
+        public void RegisterProjectionGroup<T>(T @group, ExecutionPolicy policy = null) where T : IProjectionGroup
         {
             var createActorRoute = new CreateActorRouteMessage(typeof(SynchronizationProcessingActor<T>),
                                                                typeof(T).Name,
